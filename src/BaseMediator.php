@@ -1,21 +1,15 @@
 <?php
-namespace TikiOrg;
+namespace montefuscolo;
 
-class SimpleHooksManager {
+class BaseMediator {
     private static $instance = null;
     private $filters = null;
     private $actions = null;
+    private $prefix = 'root:';
 
     private function __construct() {
         $this->filters = array();
         $this->actions = array();
-    }
-
-    public static function getInstance() {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        return self::$instance;
     }
 
     private function add(&$chain, $name, $callback, $priority) {
@@ -23,14 +17,6 @@ class SimpleHooksManager {
             $chain[ $name ] = array();
         }
         $chain[ $name ][ ] = array($callback, $priority);
-    }
-
-    public function add_filter($name, $callback, $priority=10) {
-        $this->add($this->filters, $name, $callback, $priority);
-    }
-
-    public function add_action($name, $callback, $priority=10) {
-        $this->add($this->actions, $name, $callback, $priority);
     }
 
     private function remove(&$chain, $name, $func) {
@@ -47,6 +33,49 @@ class SimpleHooksManager {
                 unset($chain[ $name ][ $key ]);
             }
         }
+    }
+
+    private function run(&$chain, $name, $subject=null) {
+        if (empty($chain[ $name ])) {
+            return $subject;
+        }
+
+        $filtering = $this->filters === $chain;
+        $subject = array_slice(func_get_args(), 2);
+
+        usort($chain[ $name ], function($a, $b) {
+            return $a[1] === $b[1] ? 0 : ( $a[1] < $b[1] ? -1 : 1 ); 
+        });
+
+        foreach ($chain[ $name ] as $function) {
+            list($callback, $priority) = $function;
+            $result = call_user_func_array($callback, $subject);
+
+            if ($filtering) {
+                $subject = array($result);
+            }
+        }
+
+        return $subject;
+    }
+
+    private function get_hook_name($name) {
+        return $this->prefix . $name;
+    }
+
+    public static function getInstance() {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    public function add_filter($name, $callback, $priority=10) {
+        $this->add($this->filters, $name, $callback, $priority);
+    }
+
+    public function add_action($name, $callback, $priority=10) {
+        $this->add($this->actions, $name, $callback, $priority);
     }
 
     public function remove_filter($name, $func=null) {

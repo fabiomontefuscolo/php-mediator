@@ -1,5 +1,5 @@
 {
-    "name": "tikiorg/simple-hooks-manager",
+    "name": "montefuscolo/php-hooks",
     "description": "A class to provide hooks as actions and filters",
     "type": "library",
     "require-dev": {
@@ -16,7 +16,7 @@
     "scripts": {
         "test": [
             "find src -name '*.php' -exec php -l {} \\;",
-            "./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/SimpleHooksManagerTest"
+            "./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/BaseMediatorTest"
         ]
     },
     "autoload": {

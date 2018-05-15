@@ -1,14 +1,14 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use TikiOrg\SimpleHooksManager;
+use montefuscolo\BaseMediator;
 
 
-class SimpleHooksManagerTest extends TestCase {
+class BaseMediatorTest extends TestCase {
     
     public function testUniqueInstance() {
-        $instance1 = SimpleHooksManager::getInstance();
-        $instance2 = SimpleHooksManager::getInstance();
+        $instance1 = BaseMediator::getInstance();
+        $instance2 = BaseMediator::getInstance();
 
         $this->assertSame($instance1, $instance2);
         $this->assertEquals($instance1, $instance2);
@@ -17,7 +17,7 @@ class SimpleHooksManagerTest extends TestCase {
     public function testAddAction() {
         $self = $this;
 
-        $hooks = SimpleHooksManager::getInstance();
+        $hooks = BaseMediator::getInstance();
         $hooks->add_action('test_add_action', function() use ($self) {
             $self->assertTrue(true);
         });
@@ -28,7 +28,7 @@ class SimpleHooksManagerTest extends TestCase {
     public function testAddActionWithParameters() {
         $self = $this;
 
-        $hooks = SimpleHooksManager::getInstance();
+        $hooks = BaseMediator::getInstance();
         $hooks->add_action('test_addaction_with_parameters', function($subject) use ($self) {
             $self->assertEquals('the-parameter', $subject);
         });
@@ -38,7 +38,7 @@ class SimpleHooksManagerTest extends TestCase {
 
 
     public function testAddActionPriority() {
-        $hooks = SimpleHooksManager::getInstance();
+        $hooks = BaseMediator::getInstance();
         $state = (object) array('name' => '');
 
         $hooks->add_action('test_add_action_priority', function($subject) {
@@ -58,7 +58,7 @@ class SimpleHooksManagerTest extends TestCase {
     }
 
     public function testRemoveAction() {
-        $hooks = SimpleHooksManager::getInstance();
+        $hooks = BaseMediator::getInstance();
 
         $callback1 = function($subject) { $subject->name .= 'callback1'; };
         $hooks->add_action('test_remove_action', $callback1, 10);
@@ -77,7 +77,7 @@ class SimpleHooksManagerTest extends TestCase {
     }
 
     public function testEmptyAction() {
-        $hooks = SimpleHooksManager::getInstance();
+        $hooks = BaseMediator::getInstance();
 
         $callback1 = function($subject) { $subject->name .= 'callback1'; };
         $hooks->add_action('test_empty_action', $callback1, 10);
@@ -92,7 +92,7 @@ class SimpleHooksManagerTest extends TestCase {
     }
 
     public function testAddFilter() {
-        $hooks = SimpleHooksManager::getInstance();
+        $hooks = BaseMediator::getInstance();
 
         $hooks->add_filter('test_add_filter', function($subject){
             return $subject * 2;
