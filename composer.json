@@ -16,7 +16,7 @@
     "scripts": {
         "test": [
             "find src -name '*.php' -exec php -l {} \\;",
-            "./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/BaseMediatorTest"
+            "./vendor/bin/phpunit --bootstrap vendor/autoload.php tests"
         ]
     },
     "autoload": {
