@@ -9,4 +9,4 @@ install:
 
 script:
   - find ./src -type f -name '*.php' -exec php -l {} \;
-  - ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
+  - ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests --testdox
