@@ -1,5 +1,5 @@
 {
-    "name": "montefuscolo/php-hooks",
+    "name": "montefuscolo/php-mediator",
     "description": "A class to provide hooks as actions and filters",
     "type": "library",
     "require-dev": {
